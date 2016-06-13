@@ -1,0 +1,1 @@
+This is a personal home automation project. It is an ongoing project started in May of 2016.
