@@ -1,1 +1,2 @@
-This is a personal home automation project. It is an ongoing project started in May of 2016.
+# Elise
+This is a personal home automation project. It is an ongoing project started in May of 2016. The original intent is to manage my memory when it comes to household tasks, including grocery shopping, chores, and utility payments.

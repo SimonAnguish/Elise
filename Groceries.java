@@ -2,28 +2,28 @@ import java.sql.*;
 import java.util.*;
 
 class Groceries {
-	Connection c = null;
-	Statement stmt = null;
-	String sql;
-	
 	public Groceries() {
+		Connection c = null;
+		Statement stmt = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:kitchen.db");
-			c.setAutoCommit(false);
-			
+			System.out.println("Opened database successfully");
+
 			stmt = c.createStatement();
-			sql = "SELECT name FROM sqlite_temp_master WHERE type='table' and name = 'GROCERIES';";
-			
-			if (stmt.executeUpdate(sql) == 0) {
-				sql = "CREATE TABLE GROCERIES (ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT NOT NULL, COST REAL NOT NULL);";
-				stmt.executeQuery(sql);
-				stmt.close();
-			}
-		} catch (Exception e) {
+			String sql = "CREATE TABLE IF NOT EXISTS GROCERIES " +
+									 "(ID INTEGER PRIMARY KEY     AUTOINCREMENT," +
+									 " NAME           TEXT    NOT NULL, " + 
+									 " COST         REAL)"; 
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.close();
+		} catch ( Exception e ) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			System.exit(0);
 		}
+		
+		System.out.println("Table created successfully");
 	}
 	
 	public void add() {
