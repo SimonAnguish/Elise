@@ -79,7 +79,7 @@ class Groceries {
 				
 				System.out.printf("%s: %.2f\n", name, cost);
 			}
-			
+			System.out.println();
 			stmt.close();
 			c.close();
 		} catch ( Exception e ) {
@@ -90,6 +90,7 @@ class Groceries {
 	
 	public void remove() {
 		this.list();
+		System.out.println();
 		Scanner keyboard = new Scanner(System.in);
 		System.out.printf("Remove: ");
 		String item = keyboard.nextLine();
@@ -120,29 +121,8 @@ class Groceries {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			System.exit(0);
 		}
-		
-//		if (gl.containsKey(item)) {
-//			gl.remove(item);
-//		} else {
-//			System.out.printf("%s is not known\n", item);
-//		}
 	}
-//	
-//	public void update() {
-//		try {
-//			FileWriter write = new FileWriter(groceries_path, false);
-//			PrintWriter print_line = new PrintWriter(write);
-//		
-//			for (String g: gl.keySet()) {
-//				print_line.printf("%s,%f\n", g, gl.get(g));
-//			}
-//			
-//			print_line.close();
-//		} catch (IOException e) {
-//			System.out.printf("Cannot open file");
-//		}
-//	}
-//	
+	
 //	public void priceOf() {
 //		Scanner keyboard = new Scanner(System.in);
 //		System.out.printf("Grocery: ");
