@@ -6,6 +6,8 @@ class Elise {
 	public static void main(String[] args) {
 		
 		Groceries g = new Groceries();
-//		g.add();
+		g.list();
+		g.add();
+		g.list();
 	}
 }
