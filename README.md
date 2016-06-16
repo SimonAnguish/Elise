@@ -1,5 +1,5 @@
 # Personal Automation Utilities Library (PAUL)
-PAUL is an ongoing project started in May of 2016. Naming credit to [Aaron Brunet]("github.com/awbrunet").
+PAUL is an ongoing project started in May of 2016. Naming credit to [Aaron Brunet]("https://github.com/awbrunet").
 
 ## Current Functionality:
 
@@ -10,6 +10,6 @@ PAUL is an ongoing project started in May of 2016. Naming credit to [Aaron Brune
 
 - Energy management when arriving & leaving home
 - Automatic pet feeder
-- Movie and Television Library (via [plex]("plex.tv")
+- Movie and Television Library (via [plex]("plex.tv"))
 - Remote manipulation of lights and heat, both manually and automatically
 - Home security and awareness features
