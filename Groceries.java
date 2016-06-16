@@ -24,6 +24,19 @@ class Groceries {
 		}
 		
 //		System.out.println("Table created successfully");
+		Scanner keyboard = new Scanner(System.in);
+		String response;
+		do {
+			System.out.printf("\n(R)emove\n(A)dd\n(L)ist\n(P)rice of\n(Q)uit\n==============\n");
+			response = keyboard.nextLine().toUpperCase();
+			switch (response) {
+				case "P": this.priceOf(); break;
+				case "R": this.remove(); break;
+				case "A": this.add(); break;
+				case "L": this.list(); break;
+				case "Q": System.exit(0); break;
+			}
+		} while (response != "Q");
 	}
 	
 	public void add() {
@@ -79,7 +92,7 @@ class Groceries {
 				
 				System.out.printf("%s: %.2f\n", name, cost);
 			}
-			System.out.println();
+
 			stmt.close();
 			c.close();
 		} catch ( Exception e ) {
@@ -107,8 +120,7 @@ class Groceries {
 			c.setAutoCommit(false);
 //			System.out.println("Opened database successfully");
 			
-			String sql = "DELETE FROM GROCERIES " +
-				"WHERE name = ?;";
+			String sql = "DELETE FROM GROCERIES WHERE name = ?;";
 				
 			pstmt = c.prepareStatement(sql);
 			pstmt.setString(1, item);
@@ -123,18 +135,42 @@ class Groceries {
 		}
 	}
 	
-//	public void priceOf() {
-//		Scanner keyboard = new Scanner(System.in);
-//		System.out.printf("Grocery: ");
-//		String item = keyboard.nextLine();
-//		priceOf(item);
-//	}
-//	
-//	public void priceOf(String item) {
-//		if (gl.containsKey(item)) {
-//			System.out.printf("Price: $%.2f\n", gl.get(item));
-//		} else {
-//			System.out.printf("%s is not known\n", item);
-//		}
-//	}
+	public void priceOf() {
+		this.list();
+		Scanner keyboard = new Scanner(System.in);
+		System.out.printf("Grocery: ");
+		String item = keyboard.nextLine();
+		priceOf(item);
+	}
+	
+	public void priceOf(String item) {
+		Connection c = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:kitchen.db");
+			c.setAutoCommit(false);
+			
+			String sql = "SELECT name, cost FROM GROCERIES WHERE name = ?;";
+			pstmt = c.prepareStatement(sql);
+			pstmt.setString(1, item);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String name = rs.getString("name");
+				Double cost = rs.getDouble("cost");
+				
+				System.out.printf("%s: %.2f\n",name, cost);
+			}
+			
+			pstmt.close();
+			
+			c.commit();
+			c.close();
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+	}
 }
