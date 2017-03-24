@@ -3,9 +3,9 @@ import java.util.*;
 
 class Groceries {
 	public Groceries() {
+		Connection c = null;
+		Statement stmt = null;
 		try {
-			Connection c = null;
-			Statement stmt = null;
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:kitchen.db");
 //			System.out.println("Opened database successfully");

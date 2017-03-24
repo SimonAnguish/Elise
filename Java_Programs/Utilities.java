@@ -27,17 +27,29 @@ class Utilities {
 	}
 	
 	public void add() {
-		Connection c = null;
-		Statement stmt = null;
 		
 		Scanner keyboard = new Scanner(System.in);
+		
+		// I have no idea why I need another Scanner
+		// Someone please explain this makes no sense
+		Scanner k = new Scanner(System.in);
 		System.out.printf("Month of Bill: ");
 		String month = keyboard.nextLine();
-		System.out.printf("\nAmount: ");
+		System.out.printf("Amount: ");
 		Double amount = keyboard.nextDouble();
-		System.out.printf("\nUtility Name: ");
-		String company = keyboard.nextLine();
+		System.out.printf("Utility Name: ");
 		
+		// This line doesn't work with 'keyboard.nextLine();'
+		// And I have no idea why
+		String company = k.nextLine();
+		add_utility(month, amount, company);
+	}
+	
+	private void add_utility(String month, Double amount, String company) {
+		Connection c = null;
+		Statement stmt = null;
+		PreparedStatement pstmt = null;
+	
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:home.db");
@@ -49,11 +61,20 @@ class Utilities {
 			int rc = 0;
 			while (rs.next()) {
 				rc++;
-				System.out.println(rs.getString("name"));
 			}
-			System.out.println("Roommate Count: " + rc);
 			
-			stmt.close();
+			sql = "INSERT INTO UTILITIES (MONTH, AMOUNT, COMPANY, SPLIT_COUNT) " +
+					"VALUES (?, ?, ?, ?);";
+					
+			pstmt = c.prepareStatement(sql);
+			pstmt.setString(1, month);
+			pstmt.setDouble(2, amount);
+			pstmt.setString(3, company);
+			pstmt.setInt(4, rc);
+			
+			pstmt.executeUpdate();
+			pstmt.close();
+			stmt.close();	
 			c.commit();
 			c.close();
 		} catch (Exception e) {
@@ -72,11 +93,11 @@ class Utilities {
 			c.setAutoCommit(false);
 			
 			stmt = c.createStatement();
-			String sql = "SELECT id, name FROM ROOMMATES;";
+			String sql = "SELECT id, company FROM UTILITIES;";
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			while (rs.next()) {
-				System.out.printf("%d: %s\n", rs.getInt("id"), rs.getString("name"));
+				System.out.printf("%d: %s\n", rs.getInt("id"), rs.getString("company"));
 			}
 			
 			stmt.close();
@@ -88,7 +109,15 @@ class Utilities {
 		}
 	}
 	
-	public void delete_by_id(int id) {
+	public void delete() {
+		Scanner keyboard = new Scanner(System.in);
+		list();
+		System.out.printf("Identify utility to delete (by id): ");
+		int id = keyboard.nextInt();
+		delete_by_id(id);
+	}
+	
+	private void delete_by_id(int id) {
 		Connection c = null;
 		PreparedStatement pstmt = null;
 		
@@ -97,7 +126,7 @@ class Utilities {
 			c = DriverManager.getConnection("jdbc:sqlite:home.db");
 			c.setAutoCommit(false);
 			
-			String sql = "DELETE FROM ROOMMATES WHERE ID = ?;";
+			String sql = "DELETE FROM UTILITIES WHERE ID = ?;";
 			
 			pstmt = c.prepareStatement(sql);
 			pstmt.setInt(1, id);
